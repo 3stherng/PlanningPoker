@@ -1,0 +1,51 @@
+
+- welcome page (enter name)
+- story list view
+     Tabs:
+	- unsized stories (Add story)
+	- sized stories(with filters)
+
+- grooming page
+  - cards
+  - user list (vote status and size)
+  - timer
+  - result
+
+
+- Configuration page
+	- chagne moderator
+	- change card number type(fibonacci)
+
+-------------------------------------------------------
+structure: 
+	Story
+	- id
+	- text
+	- size
+	
+	Size
+	- story_id
+	- user_name
+	- size
+
+	User
+	- name
+-------------------------------------------------------
+backend API's
+
+	Story
+	- create_new
+	- update
+	- delete
+
+	User
+	- create_user
+	- set_moderator
+	- delete_user
+	- update_user
+
+	*Size
+	- set_size (which use sized it, story_id, size)
+	- start_timer**
+	- submit_size
+	- get_status :returns size of all users to that particular story
