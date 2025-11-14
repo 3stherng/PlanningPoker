@@ -40,7 +40,7 @@ router.post("/update", function (req: express.Request, res: express.Response) {
 
 router.post("/delete", function (req: express.Request, res: express.Response) {
   let story_found = false;
-  let idx_to_delete = null;
+  let idx_to_delete = 0;
   const id = parseInt(req.body.id);
 
   for (let idx = 0; idx < stories.length; ++idx) {

@@ -11,7 +11,9 @@ router.get("/list", function (req: express.Request, res: express.Response) {
 router.post(
   "/get_user_name_with_id",
   function (req: express.Request, res: express.Response) {
-    if (!req.body.id) res.status("id required");
+    if (!req.body.id) {
+      return res.status(400).json({ error: "id required" });
+    }
     for (let user of users) {
       if (user.id === req.body.id) {
         res.status(200).json(user.name);
@@ -25,7 +27,10 @@ router.post(
   "/register",
   function (req: express.Request, res: express.Response) {
     let max_id = 0;
-    if (!req.body.name) res.status("name required");
+    if (!req.body.name) {
+      res.status(400).send("name required");
+      return;
+    }
     for (let user of users) if (max_id < user.id) max_id = user.id;
     const user = {
       id: max_id + 1,
@@ -56,7 +61,7 @@ router.post(
 
 router.post("/delete", function (req: express.Request, res: express.Response) {
   let user_found = false;
-  let idx_to_delete = null;
+  let idx_to_delete = 0;
   const id = parseInt(req.body.id);
   for (let idx = 0; idx < users.length; ++idx) {
     if (users[idx].id === id) {

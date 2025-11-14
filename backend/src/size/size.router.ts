@@ -108,7 +108,7 @@ router.post("/revote", function (req: express.Request, res: express.Response) {
       console.log(current_story.id);
       for (let current_vote of votes) {
         if (current_vote.story_id === current_story.id)
-          current_vote.size = null;
+          current_vote.size = 0;
       }
       res.status(200).json(stories);
     }
