@@ -67,11 +67,11 @@ export function Configuration() {
           </td>
         </tr>
       );
-    }
+    } else return null;
   });
 
   const showNonModerators = allUsers.map((user: any, idx: any) => {
-    if (user.id != moderator) {
+    if (user.id !== moderator) {
       return (
         <tr key={idx}>
           <td className="w-auto p-3">
@@ -82,14 +82,16 @@ export function Configuration() {
                   variant="primary"
                   onClick={() => {
                     updateModerator(user.id);
-                  }}>
+                  }}
+                >
                   Make moderator
                 </Button>{" "}
                 <Button
                   variant="danger"
                   onClick={() => {
                     deleteUser(user.id);
-                  }}>
+                  }}
+                >
                   Remove
                 </Button>{" "}
                 {/* <Button variant="primary" >Edit</Button> */}
@@ -98,7 +100,7 @@ export function Configuration() {
           </td>
         </tr>
       );
-    }
+    } else return null;
   });
 
   const allPlayers = (
@@ -111,7 +113,8 @@ export function Configuration() {
                 fontWeight: "bold",
                 fontSize: "30px",
                 textAlign: "center",
-              }}>
+              }}
+            >
               Users
             </p>
           </Col>

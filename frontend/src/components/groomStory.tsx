@@ -13,7 +13,6 @@ import { Card } from "react-bootstrap";
 import { StoryContext } from "../contexts/storyContext";
 import { Get, Post } from "../communication";
 import { UserContext } from "../contexts/userContext";
-import { visitEachChild } from "typescript";
 
 export function Grooming() {
   const [allUsers, setAllUsers] = useState([]);
@@ -45,7 +44,7 @@ export function Grooming() {
     fetchAllUsers();
     fetchStories();
     fetchAllVotes(story_id);
-  }, []);
+  }, [story_id]);
 
   const fetchAllUsers = async () => {
     const { status, result } = await Get("http://localhost:3000/user/list");
@@ -154,7 +153,8 @@ export function Grooming() {
               fontWeight: "bold",
               fontSize: "30px",
               textAlign: "center",
-            }}>
+            }}
+          >
             Groom Story:
             {"  "}
             <Button variant="link" onClick={handleShowM1}>
@@ -181,7 +181,8 @@ export function Grooming() {
                 <Button
                   variant="primary"
                   type="submit"
-                  onClick={handleSubmitTitle}>
+                  onClick={handleSubmitTitle}
+                >
                   Confirm
                 </Button>
               </Form>
@@ -200,7 +201,8 @@ export function Grooming() {
       <ListGroup as="ol" key={idx}>
         <ListGroup.Item
           as="li"
-          className="d-flex justify-content-between align-items-start">
+          className="d-flex justify-content-between align-items-start"
+        >
           <Stack direction="horizontal" gap={5}>
             <div className="ms-2 me-auto">
               <div className="fw-bold">{vote.user}</div>
@@ -220,7 +222,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 1)}>
+          onClick={() => handleVote(story_id, curr_user_id, 1)}
+        >
           1{" "}
         </Button>
         <br />
@@ -228,7 +231,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 5)}>
+          onClick={() => handleVote(story_id, curr_user_id, 5)}
+        >
           5{" "}
         </Button>
         <br />
@@ -236,7 +240,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 13)}>
+          onClick={() => handleVote(story_id, curr_user_id, 13)}
+        >
           13{" "}
         </Button>
       </div>
@@ -245,7 +250,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 2)}>
+          onClick={() => handleVote(story_id, curr_user_id, 2)}
+        >
           2{" "}
         </Button>
         <br />
@@ -253,7 +259,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 6)}>
+          onClick={() => handleVote(story_id, curr_user_id, 6)}
+        >
           6{" "}
         </Button>
         <br />
@@ -261,7 +268,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 21)}>
+          onClick={() => handleVote(story_id, curr_user_id, 21)}
+        >
           21{" "}
         </Button>
       </div>
@@ -270,7 +278,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 3)}>
+          onClick={() => handleVote(story_id, curr_user_id, 3)}
+        >
           3{" "}
         </Button>
         <br />
@@ -278,7 +287,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 7)}>
+          onClick={() => handleVote(story_id, curr_user_id, 7)}
+        >
           7{" "}
         </Button>
         <br />
@@ -286,7 +296,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, null)}>
+          onClick={() => handleVote(story_id, curr_user_id, null)}
+        >
           ?{" "}
         </Button>
       </div>
@@ -295,7 +306,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 4)}>
+          onClick={() => handleVote(story_id, curr_user_id, 4)}
+        >
           4{" "}
         </Button>
         <br />
@@ -303,7 +315,8 @@ export function Grooming() {
         <Button
           variant="light"
           size="lg"
-          onClick={() => handleVote(story_id, curr_user_id, 8)}>
+          onClick={() => handleVote(story_id, curr_user_id, 8)}
+        >
           8{" "}
         </Button>
       </div>
@@ -347,7 +360,8 @@ export function Grooming() {
                       style={{
                         fontWeight: "bold",
                         fontSize: "15px",
-                      }}>
+                      }}
+                    >
                       Players
                     </p>
                     {all_votes}

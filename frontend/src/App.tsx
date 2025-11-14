@@ -1,6 +1,6 @@
 import "./App.css";
 import { useContext, useState} from 'react';
-import { Routes, Router, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 import { StoryContext } from "./contexts/storyContext";
 import { UserContext } from "./contexts/userContext";
