@@ -7,6 +7,7 @@ import { StoryRouter } from "./story/story.router";
 import { SizeRouter } from "./size/size.router";
 
 const app = express();
+require("dotenv").config();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json());

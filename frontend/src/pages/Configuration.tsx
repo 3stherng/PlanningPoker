@@ -15,12 +15,12 @@ export function Configuration() {
   }, []);
 
   const fetchAllUsers = async () => {
-    const { status, result } = await Get("http://localhost:3000/user/list");
+    const { status, result } = await Get("/user/list");
     if (status) setAllUsers(result);
   };
 
   const requestUpdateModerator = async (id: number) => {
-    const { status } = await Post("http://localhost:3000/user/moderator", {
+    const { status } = await Post("/user/moderator", {
       id,
     });
     if (status) {
@@ -33,7 +33,7 @@ export function Configuration() {
   };
 
   const requestDeleteUser = async (id: number) => {
-    const { status } = await Post("http://localhost:3000/user/delete", { id });
+    const { status } = await Post("/user/delete", { id });
     if (status) {
       setFeedback({ type: "success", message: "🗑️ User deleted." });
       setAllUsers(allUsers.filter((u) => u.id !== id));

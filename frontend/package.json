@@ -42,5 +42,8 @@
     ],
     "proxy": "http://localhost:3000",
     "homepage": "."
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1"
   }
 }

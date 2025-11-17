@@ -26,12 +26,12 @@ export function ViewStory() {
   }, []);
 
   const fetchStories = async () => {
-    const { status, result } = await Get("http://localhost:3000/story/list");
+    const { status, result } = await Get("/story/list");
     if (status) setAllStories(result);
   };
 
   const requestAddStory = async (title: string) => {
-    const { status, result } = await Post("http://localhost:3000/story/add", { title });
+    const { status, result } = await Post("/story/add", { title });
     if (status) {
       setFeedback({ type: "success", message: "✅ Story added successfully!" });
       setAllStories(result);
@@ -39,7 +39,7 @@ export function ViewStory() {
   };
 
   const requestUpdateTitle = async (story_id: any, edited_title: string) => {
-    const { status, result } = await Post("http://localhost:3000/story/update", {
+    const { status, result } = await Post("/story/update", {
       id: story_id,
       title: edited_title,
     });
@@ -51,7 +51,7 @@ export function ViewStory() {
   };
 
   const requestDeleteStory = async (story_id: any) => {
-    const { status } = await Post("http://localhost:3000/story/delete", { story_id });
+    const { status } = await Post("/story/delete", { story_id });
     if (status) {
       setFeedback({ type: "success", message: "🗑️ Story deleted." });
       setAllStories(allStories.filter((s) => s.id !== story_id));

@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "downlevelIteration": true,
-    "types": ["react/next", "react-dom/next"]
+    "types": ["node", "react/next", "react-dom/next"]
   },
   "include": ["src"]
 }

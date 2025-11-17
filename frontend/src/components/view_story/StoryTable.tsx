@@ -20,7 +20,7 @@ export function StoryTable({
           <th>ID</th>
           <th>Story Title</th>
           {type !== "active" && <th>Size</th>}
-          <th>Actions</th>
+          {type !== "completed" && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>

@@ -52,18 +52,18 @@ export function Grooming() {
   }, [story_id]);
 
   const fetchAllUsers = async () => {
-    const { status, result } = await Get("http://localhost:3000/user/list");
+    const { status, result } = await Get("/user/list");
     if (status) setAllUsers(result);
   };
 
   const fetchStories = async () => {
-    const { status, result } = await Get("http://localhost:3000/story/list");
+    const { status, result } = await Get("/story/list");
     if (status) setAllStories(result);
   };
 
   const fetchAllVotes = async (story_id: any) => {
     const { status, result } = await Post(
-      "http://localhost:3000/size/allvotes",
+      "/size/allvotes",
       { story_id }
     );
     if (status) setAllVotes(result);
@@ -74,7 +74,7 @@ export function Grooming() {
     user_id: any,
     size: any
   ) => {
-    const { status } = await Post("http://localhost:3000/size/voting", {
+    const { status } = await Post("/size/voting", {
       story_id,
       user_id,
       size,
@@ -86,7 +86,7 @@ export function Grooming() {
   };
 
   const requestRevote = async (story_id: any) => {
-    const { status, result } = await Post("http://localhost:3000/size/revote", {
+    const { status, result } = await Post("/size/revote", {
       story_id,
     });
     if (status) {
@@ -100,7 +100,7 @@ export function Grooming() {
   };
 
   const requestSubmitVote = async (story_id: any) => {
-    const { status, result } = await Post("http://localhost:3000/size/submit", {
+    const { status, result } = await Post("/size/submit", {
       story_id,
     });
     if (status) {
@@ -110,7 +110,7 @@ export function Grooming() {
   };
 
   const requestAddStory = async (title: string) => {
-    const { status, result } = await Post("http://localhost:3000/story/add", {
+    const { status, result } = await Post("/story/add", {
       title,
     });
     if (status) {

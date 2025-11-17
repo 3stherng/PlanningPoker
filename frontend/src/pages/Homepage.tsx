@@ -14,7 +14,7 @@ export function Homepage() {
   const { updateCurrUserName } = useContext(UserContext);
 
   const registerUser = async (name: string) => {
-    const { status } = await Post("http://localhost:3000/user/register", {
+    const { status } = await Post("/user/register", {
       name,
     });
     if (status === true) {
