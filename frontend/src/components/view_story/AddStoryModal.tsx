@@ -20,7 +20,11 @@ export function AddStoryModal({
         <Form onSubmit={onSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>Title</Form.Label>
-            <Form.Control type="text" placeholder="Enter story title" onChange={(e) => setTitle(e.target.value)} />
+            <Form.Control
+              type="text"
+              placeholder="Enter story title"
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </Form.Group>
           <div className="d-flex justify-content-end gap-2">
             <Button variant="secondary" onClick={onClose}>

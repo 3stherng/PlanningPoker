@@ -39,7 +39,7 @@ router.post(
     };
     console.log(user);
     users.push(user);
-    res.status(200).send("User registered");
+    res.status(200).json(users);
   }
 );
 

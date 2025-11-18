@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useContext } from "react";
+import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
@@ -12,33 +12,26 @@ import { Footer } from "./components/Footer";
 import { Homepage } from "./pages/Homepage";
 import { ViewStory } from "./pages/StoryManagement";
 import { Grooming } from "./pages/Grooming";
+import { Room } from "./pages/Room";
 import { Configuration } from "./pages/Configuration";
 
 function App() {
-  const [, callback] = useState({});
-  const updateCallback = () => {
-    callback({});
-  };
-  const { setUpdateUserCallback } = useContext(UserContext);
-  setUpdateUserCallback(updateCallback);
-
-  const { setUpdateStoryCallback } = useContext(StoryContext);
-  setUpdateStoryCallback(updateCallback);
-
-  const { getCurrUserName } = useContext(UserContext);
-  const curr_user_name = getCurrUserName();
+  const { currUserName } = useContext(UserContext);
 
   return (
     <div className="App">
-      <NavigationBar user={curr_user_name}></NavigationBar>
-      <BrowserRouter>
-        <Routes>
+      <NavigationBar user={currUserName}></NavigationBar>
+      <Routes>
+        {currUserName === "" ? (
           <Route path="/" element={<Homepage />}></Route>
-          <Route path="/story" element={<ViewStory />}></Route>
-          <Route path="/grooming" element={<Grooming />}></Route>
-          <Route path="/configuration" element={<Configuration />}></Route>
-        </Routes>
-      </BrowserRouter>
+        ) : (
+          <Route path="/" element={<Room />}></Route>
+        )}
+        <Route path="/story" element={<ViewStory />}></Route>
+        <Route path="/grooming" element={<Grooming />}></Route>
+        <Route path="/configuration" element={<Configuration />}></Route>
+        <Route path="/room" element={<Room />}></Route>
+      </Routes>
       <Footer></Footer>
     </div>
   );

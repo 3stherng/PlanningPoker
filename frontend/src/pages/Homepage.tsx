@@ -17,11 +17,12 @@ export function Homepage() {
     const { status } = await Post("/user/register", {
       name,
     });
-    if (status === true) {
+    if (status) {
       setFeedback({
         type: "success",
         message: "🎉 Successfully registered! Welcome aboard.",
       });
+      updateCurrUserName(name);
     } else {
       setFeedback({
         type: "error",
@@ -37,7 +38,6 @@ export function Homepage() {
       return;
     }
     registerUser(currUser);
-    updateCurrUserName(currUser);
   };
 
   return (

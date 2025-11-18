@@ -29,11 +29,11 @@ export function Grooming() {
     message: string;
   } | null>(null);
 
-  const { getCurrUserName } = useContext(UserContext);
-  const curr_user_name = getCurrUserName();
+  const { currUserName } = useContext(UserContext);
+  const curr_user_name = currUserName;
 
-  const { getGroomingStoryID } = useContext(StoryContext);
-  const story_id = getGroomingStoryID();
+  const { groomingStoryID } = useContext(StoryContext);
+  const story_id = groomingStoryID;
 
   let curr_user_id: any = null;
 
@@ -62,17 +62,14 @@ export function Grooming() {
   };
 
   const fetchAllVotes = async (story_id: any) => {
-    const { status, result } = await Post(
-      "/size/allvotes",
-      { story_id }
-    );
+    const { status, result } = await Post("/size/allvotes", { story_id });
     if (status) setAllVotes(result);
   };
 
   const requestCurrUserVote = async (
     story_id: any,
     user_id: any,
-    size: any
+    size: any,
   ) => {
     const { status } = await Post("/size/voting", {
       story_id,
@@ -163,7 +160,7 @@ export function Grooming() {
                             requestCurrUserVote(
                               story_id,
                               curr_user_id,
-                              size === "?" ? null : size
+                              size === "?" ? null : size,
                             )
                           }
                         >

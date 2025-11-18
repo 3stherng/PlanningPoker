@@ -12,7 +12,10 @@ export function ViewStory() {
   const [allStories, setAllStories] = useState<any[]>([]);
   const [title, setTitle] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -44,10 +47,14 @@ export function ViewStory() {
       title: edited_title,
     });
     if (status) {
-      setFeedback({ type: "success", message: "✏️ Title updated successfully!" });
+      setFeedback({
+        type: "success",
+        message: "✏️ Title updated successfully!",
+      });
       setEditedTitle(result);
       fetchStories();
-    } else setFeedback({ type: "error", message: "⚠️ Failed to update title." });
+    } else
+      setFeedback({ type: "error", message: "⚠️ Failed to update title." });
   };
 
   const requestDeleteStory = async (story_id: any) => {
@@ -55,7 +62,8 @@ export function ViewStory() {
     if (status) {
       setFeedback({ type: "success", message: "🗑️ Story deleted." });
       setAllStories(allStories.filter((s) => s.id !== story_id));
-    } else setFeedback({ type: "error", message: "⚠️ Failed to delete story." });
+    } else
+      setFeedback({ type: "error", message: "⚠️ Failed to delete story." });
   };
 
   // Handlers
@@ -81,7 +89,9 @@ export function ViewStory() {
         <Card className="shadow-lg border-0 rounded-4 p-4">
           <Card.Header className="bg-white border-0 text-center">
             <h2 className="fw-bold text-primary">📖 Story Management</h2>
-            <p className="text-muted">Manage, size, and track your planning poker stories</p>
+            <p className="text-muted">
+              Manage, size, and track your planning poker stories
+            </p>
           </Card.Header>
 
           <FeedbackAlert feedback={feedback} />
@@ -120,7 +130,12 @@ export function ViewStory() {
           </Tabs>
 
           <Card.Footer className="bg-white border-0 text-center">
-            <Button variant="primary" size="lg" className="rounded-pill" onClick={() => setShowAdd(true)}>
+            <Button
+              variant="primary"
+              size="lg"
+              className="rounded-pill"
+              onClick={() => setShowAdd(true)}
+            >
               ➕ Add Story
             </Button>
           </Card.Footer>
@@ -128,7 +143,12 @@ export function ViewStory() {
       </Col>
 
       {/* Modals */}
-      <AddStoryModal show={showAdd} onClose={() => setShowAdd(false)} onSubmit={handleSubmit} setTitle={setTitle} />
+      <AddStoryModal
+        show={showAdd}
+        onClose={() => setShowAdd(false)}
+        onSubmit={handleSubmit}
+        setTitle={setTitle}
+      />
       <EditStoryModal
         show={showEdit}
         onClose={() => setShowEdit(false)}

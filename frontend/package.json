@@ -44,6 +44,7 @@
     "homepage": "."
   },
   "devDependencies": {
-    "@types/node": "^24.10.1"
+    "@types/node": "^24.10.1",
+    "prettier": "^3.6.2"
   }
 }

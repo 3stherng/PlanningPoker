@@ -32,7 +32,11 @@ export function StoryTable({
                 <td>{story.title}</td>
                 <td>{story.size ?? "Active"}</td>
                 <td>
-                  <Button variant="info" size="sm" onClick={() => onEdit(story.id)}>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={() => onEdit(story.id)}
+                  >
                     Edit
                   </Button>
                 </td>
@@ -45,10 +49,18 @@ export function StoryTable({
                 <td>{story.id}</td>
                 <td>{story.title}</td>
                 <td>
-                  <Button variant="primary" size="sm" onClick={() => onSize(story.id)}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => onSize(story.id)}
+                  >
                     Let’s Size
                   </Button>{" "}
-                  <Button variant="danger" size="sm" onClick={() => onDelete(story.id)}>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => onDelete(story.id)}
+                  >
                     Delete
                   </Button>
                 </td>

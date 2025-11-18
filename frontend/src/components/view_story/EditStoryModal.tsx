@@ -20,7 +20,11 @@ export function EditStoryModal({
         <Form>
           <Form.Group className="mb-3">
             <Form.Label>New Title</Form.Label>
-            <Form.Control type="text" placeholder="Enter new title" onChange={(e) => setEditedTitle(e.target.value)} />
+            <Form.Control
+              type="text"
+              placeholder="Enter new title"
+              onChange={(e) => setEditedTitle(e.target.value)}
+            />
           </Form.Group>
           <div className="d-flex justify-content-end gap-2">
             <Button variant="secondary" onClick={onClose}>

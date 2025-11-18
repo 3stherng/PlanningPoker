@@ -13,7 +13,9 @@ export const Footer = () => {
       }}
     >
       <small>
-        © {new Date().getFullYear()} <span style={{ fontWeight: "bold" }}>Planning Poker</span> · All rights reserved
+        © {new Date().getFullYear()}{" "}
+        <span style={{ fontWeight: "bold" }}>Planning Poker</span> · All rights
+        reserved
       </small>
     </footer>
   );
