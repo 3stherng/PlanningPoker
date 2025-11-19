@@ -9,12 +9,18 @@ export let users = [
   { id: 8, name: "User H", is_moderator: false },
 ];
 
+
+export let rooms = [
+  { id: 1, name: "Room 1"},
+  { id: 2, name: "Room 2"},
+  { id: 3, name: "Room 3"},
+];
 export let stories = [
-  { id: 1, title: "This is story A", size: 4 },
-  { id: 2, title: "This is story B", size: 5 },
-  { id: 3, title: "This is story C", size: null },
-  { id: 4, title: "This is story D", size: null },
-  { id: 5, title: "This is story E", size: 4 },
+  { room_id: 1, id: 1, title: "This is story A", size: 4 },
+  { room_id: 1, id: 2, title: "This is story B", size: 5 },
+  { room_id: 1, id: 3, title: "This is story C", size: null },
+  { room_id: 1, id: 4, title: "This is story D", size: null },
+  { room_id: 1, id: 5, title: "This is story E", size: 4 },
 ];
 
 export let votes = [

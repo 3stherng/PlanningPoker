@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import { UserRouter } from "./user/user.router";
 import { StoryRouter } from "./story/story.router";
 import { SizeRouter } from "./size/size.router";
+import { roomRouter } from "./room/room.router";
 
 const app = express();
 require("dotenv").config();
@@ -32,6 +33,7 @@ app.use(Logger);
 app.use("/user", UserRouter);
 app.use("/story", StoryRouter);
 app.use("/size", SizeRouter);
+app.use("/room", roomRouter);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}...`);

@@ -78,7 +78,7 @@ export function Homepage() {
                 size="lg"
                 className="rounded-pill"
               >
-                Join the Room
+                Join
               </Button>
             </div>
           </Form>

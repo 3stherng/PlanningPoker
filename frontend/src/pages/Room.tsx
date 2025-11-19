@@ -73,17 +73,26 @@ export function Room() {
       <Row>
         {rooms.length > 0 ? (
           rooms.map((room) => (
-            <Col md={4} key={room.id} className="mb-4">
+            <Col md={6} key={room.id} className="mb-4">
               <Card className="shadow-sm border-0 rounded-3 hover-zoom">
-                <Card.Body>
+                <Card.Body className="text-center">
                   <Card.Title className="fw-bold">{room.name}</Card.Title>
                   <Card.Text className="text-muted">ID: {room.id}</Card.Text>
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => navigate(`/room/${room.id}`)}
-                  >
-                    🚪 Enter Room
-                  </Button>
+
+                  <div className="d-flex justify-content-center gap-2">
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => navigate(`/grooming/${room.id}`)}
+                    >
+                      🚪 Enter Room
+                    </Button>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => navigate(`/story/${room.id}`)}
+                    >
+                      📖 View Stories
+                    </Button>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>

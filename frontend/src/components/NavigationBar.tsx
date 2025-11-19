@@ -31,12 +31,6 @@ export function NavigationBar(props: any) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/story">
-                Story Management
-              </Nav.Link>
-              <Nav.Link as={Link} to="/grooming">
-                Grooming
-              </Nav.Link>
               <Nav.Link as={Link} to="/configuration">
                 Configuration
               </Nav.Link>

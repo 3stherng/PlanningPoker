@@ -27,8 +27,8 @@ function App() {
         ) : (
           <Route path="/" element={<Room />}></Route>
         )}
-        <Route path="/story" element={<ViewStory />}></Route>
-        <Route path="/grooming" element={<Grooming />}></Route>
+        <Route path="/story/:id" element={<ViewStory />}></Route>
+        <Route path="/grooming/:id" element={<Grooming />}></Route>
         <Route path="/configuration" element={<Configuration />}></Route>
         <Route path="/room" element={<Room />}></Route>
       </Routes>

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Row, Col, Card, Tab, Tabs, Button } from "react-bootstrap";
 import { StoryContext } from "../contexts/storyContext";
 import { Get, Post } from "../communication";
@@ -9,6 +9,8 @@ import { AddStoryModal } from "../components/view_story/AddStoryModal";
 import { FeedbackAlert } from "../components/view_story/FeedbackAlert";
 
 export function ViewStory() {
+  const { id } = useParams(); // room id from URL
+
   const [allStories, setAllStories] = useState<any[]>([]);
   const [title, setTitle] = useState("");
   const [editedTitle, setEditedTitle] = useState("");

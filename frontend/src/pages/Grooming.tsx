@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 import {
   Card,
   Button,
@@ -16,6 +17,8 @@ import { UserContext } from "../contexts/userContext";
 import { Get, Post } from "../communication";
 
 export function Grooming() {
+  const { id } = useParams(); // room id from URL
+
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [allStories, setAllStories] = useState<any[]>([]);
   const [allVotes, setAllVotes] = useState<any[]>([]);
@@ -51,6 +54,11 @@ export function Grooming() {
     fetchAllVotes(story_id);
   }, [story_id]);
 
+  //   useEffect(() => {
+  //   // Example backend call
+  //   Post("/room/enter", { id });
+  // }, [id]);
+
   const fetchAllUsers = async () => {
     const { status, result } = await Get("/user/list");
     if (status) setAllUsers(result);
@@ -69,7 +77,7 @@ export function Grooming() {
   const requestCurrUserVote = async (
     story_id: any,
     user_id: any,
-    size: any,
+    size: any
   ) => {
     const { status } = await Post("/size/voting", {
       story_id,
@@ -160,7 +168,7 @@ export function Grooming() {
                             requestCurrUserVote(
                               story_id,
                               curr_user_id,
-                              size === "?" ? null : size,
+                              size === "?" ? null : size
                             )
                           }
                         >
