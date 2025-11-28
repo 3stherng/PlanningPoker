@@ -1,16 +1,18 @@
-import { Row, Col, Card, Alert, Accordion, Button } from "react-bootstrap";
+import { Row, Col, Card, Accordion, Button } from "react-bootstrap";
+import { Feedback, Player } from "../../types/grooming";
+import { FeedbackAlert } from "../shared/FeedbackAlert";
 
 interface PlayersManagementProps {
-  activeUsers: any[];
-  moderator: number | null;
-  feedback: { type: "success" | "error"; message: string } | null;
+  players: Player[];
+  moderatorId: number | null;
+  feedback: Feedback | null;
   onUpdateModerator: (userId: number) => void;
   onDeleteUser: (userId: number) => void;
 }
 
 export function PlayersManagement({
-  activeUsers,
-  moderator,
+  players,
+  moderatorId,
   feedback,
   onUpdateModerator,
   onDeleteUser,
@@ -23,21 +25,14 @@ export function PlayersManagement({
             <Accordion.Item eventKey="0">
               <Accordion.Header>Manage players</Accordion.Header>
               <Accordion.Body>
-                {feedback && (
-                  <Alert
-                    variant={feedback.type === "success" ? "success" : "danger"}
-                    className="text-center"
-                  >
-                    {feedback.message}
-                  </Alert>
-                )}
+                <FeedbackAlert feedback={feedback} />
                 <Row className="g-4 justify-content-center">
-                  {activeUsers.map((user) => (
+                  {players.map((user) => (
                     <Col xs={12} md={6} lg={4} key={user.id}>
                       <Card className="shadow-sm border-0 rounded-3">
                         <Card.Body className="text-center">
                           <Card.Title className="fw-bold">{user.name}</Card.Title>
-                          {user.id === moderator ? (
+                          {user.id === moderatorId ? (
                             <p className="text-primary fw-semibold">👑 Moderator</p>
                           ) : (
                             <div className="d-flex justify-content-center gap-2 mt-3">
@@ -61,7 +56,7 @@ export function PlayersManagement({
                       </Card>
                     </Col>
                   ))}
-                  {activeUsers.length === 0 && (
+                  {players.length === 0 && (
                     <Col xs={12}>
                       <p className="text-muted text-center">No active users yet.</p>
                     </Col>

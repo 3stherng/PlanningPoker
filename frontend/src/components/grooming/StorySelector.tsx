@@ -1,15 +1,16 @@
 import { Form } from "react-bootstrap";
+import { Story } from "../../types/grooming";
 
 interface StorySelectorProps {
   selectedStoryId: number | null;
-  allStories: any[];
+  stories: Story[];
   onStorySelect: (storyId: number, roomId: number | undefined) => void;
   roomId: number | undefined;
 }
 
 export function StorySelector({
   selectedStoryId,
-  allStories,
+  stories,
   onStorySelect,
   roomId,
 }: StorySelectorProps) {
@@ -23,7 +24,7 @@ export function StorySelector({
       className="mt-2"
     >
       <option value="">Select a story...</option>
-      {allStories.map((s) => (
+      {stories.map((s) => (
         <option key={s.id} value={s.id}>
           {s.title}
         </option>

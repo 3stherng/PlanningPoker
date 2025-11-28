@@ -1,80 +1,75 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Tab, Tabs, Button } from "react-bootstrap";
 import { StoryContext } from "../contexts/storyContext";
-import { Get, Post } from "../communication";
-import { StoryTable } from "../components/view_story/StoryTable";
-import { EditStoryModal } from "../components/view_story/EditStoryModal";
-import { AddStoryModal } from "../components/view_story/AddStoryModal";
-import { FeedbackAlert } from "../components/view_story/FeedbackAlert";
-import { SelectRoomModal } from "../components/view_story/SelectRoomModal";
+import { storyManagementService } from "../services/storyManagementService";
+import { Feedback } from "../types/grooming";
+import { Story, Room, StoryId, RoomId } from "../types/storyManagement";
+import { StoryTable } from "../components/story_management/StoryTable";
+import { AddStoryModal } from "../components/story_management/AddStoryModal";
+import { FeedbackAlert } from "../components/shared/FeedbackAlert";
+import { SelectRoomModal } from "../components/story_management/SelectRoomModal";
 
 export function ViewStory() {
-  const [allStories, setAllStories] = useState<any[]>([]);
-  const [title, setTitle] = useState("");
-  const [feedback, setFeedback] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
+  const [stories, setStories] = useState<Story[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
-  const [showAdd, setShowAdd] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [showRoomModal, setShowRoomModal] = useState(false);
-
-  const [rooms, setRooms] = useState<any[]>([]);
 
   const { updateGroomingStoryID } = useContext(StoryContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchStories();
-    fetchRooms();
+    loadStories();
+    loadRooms();
   }, []);
 
-  const fetchStories = async () => {
-    const { status, result } = await Get("/story/list");
-    if (status) setAllStories(result);
+  const loadStories = async () => {
+    try {
+      const loadedStories = await storyManagementService.listStories();
+      setStories(loadedStories);
+    } catch (error: any) {
+      setFeedback({ type: "error", message: error.message ?? "Failed to load stories" });
+    }
   };
 
-  const fetchRooms = async () => {
-    const { status, result } = await Get("/room/list");
-    if (status) setRooms(result);
+  const loadRooms = async () => {
+    try {
+      const loadedRooms = await storyManagementService.listRooms();
+      setRooms(loadedRooms);
+    } catch (error: any) {
+      setFeedback({ type: "error", message: error.message ?? "Failed to load rooms" });
+    }
   };
 
-  const requestAddStory = async (title: string) => {
-    const { status, result } = await Post("/story/add", { title });
-    if (status) {
+  const handleAddStory = async (title: string) => {
+    try {
+      const updatedStories = await storyManagementService.addStory(title);
+      setStories(updatedStories);
       setFeedback({ type: "success", message: "✅ Story added successfully!" });
-      setAllStories(result);
-    } else setFeedback({ type: "error", message: "⚠️ Failed to add story." });
+    } catch (error: any) {
+      setFeedback({ type: "error", message: error.message ?? "Failed to add story" });
+    }
   };
 
-  const requestDeleteStory = async (story_id: any) => {
-    const { status } = await Post("/story/delete", { story_id });
-    if (status) {
-      setFeedback({ type: "success", message: "🗑️ Story deleted." });
-      setAllStories(allStories.filter((s) => s.id !== story_id));
-    } else
-      setFeedback({ type: "error", message: "⚠️ Failed to delete story." });
+  const handleDeleteStory = async (storyId: StoryId) => {
+    try {
+      await storyManagementService.deleteStory(storyId);
+      setStories(stories.filter((s) => s.id !== storyId));
+      setFeedback({ type: "success", message: "🗑️ Story deleted successfully!" });
+    } catch (error: any) {
+      setFeedback({ type: "error", message: error.message ?? "Failed to delete story" });
+    }
   };
 
-  // Handlers
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    requestAddStory(title);
-    setShowAdd(false);
-  };
-
-  const submitEditedTitle = () => {
-    setShowEdit(false);
-  };
-
-  const handleClick = (story_id: any) => {
-    updateGroomingStoryID(story_id);
+  const handleGroomStory = (storyId: StoryId) => {
+    updateGroomingStoryID(storyId);
     setShowRoomModal(true);
   };
 
-  const handleRoomConfirm = (roomId: number) => {
+  const handleRoomSelect = (roomId: RoomId) => {
     navigate(`/grooming/${roomId}`);
   };
 
@@ -94,26 +89,26 @@ export function ViewStory() {
           <Tabs defaultActiveKey="all" className="mb-3">
             <Tab eventKey="all" title="All Stories">
               <StoryTable
-                stories={allStories}
-                type="all"
-                onDelete={requestDeleteStory}
-                onSize={handleClick}
+                stories={stories}
+                viewType="all"
+                onDelete={handleDeleteStory}
+                onGroom={handleGroomStory}
               />
             </Tab>
             <Tab eventKey="active" title="Active Stories">
               <StoryTable
-                stories={allStories}
-                type="active"
-                onDelete={requestDeleteStory}
-                onSize={handleClick}
+                stories={stories}
+                viewType="active"
+                onDelete={handleDeleteStory}
+                onGroom={handleGroomStory}
               />
             </Tab>
             <Tab eventKey="completed" title="Completed Stories">
               <StoryTable
-                stories={allStories}
-                type="completed"
-                onDelete={() => {}}
-                onSize={() => {}}
+                stories={stories}
+                viewType="completed"
+                onDelete={handleDeleteStory}
+                onGroom={handleGroomStory}
               />
             </Tab>
           </Tabs>
@@ -123,7 +118,7 @@ export function ViewStory() {
               variant="primary"
               size="lg"
               className="rounded-pill"
-              onClick={() => setShowAdd(true)}
+              onClick={() => setShowAddModal(true)}
             >
               ➕ Add Story
             </Button>
@@ -133,22 +128,15 @@ export function ViewStory() {
 
       {/* Modals */}
       <AddStoryModal
-        show={showAdd}
-        onClose={() => setShowAdd(false)}
-        onSubmit={handleSubmit}
-        setTitle={setTitle}
-      />
-      <EditStoryModal
-        show={showEdit}
-        onClose={() => setShowEdit(false)}
-        onConfirm={submitEditedTitle}
-        setEditedTitle={() => {}}
+        show={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={handleAddStory}
       />
       <SelectRoomModal
         show={showRoomModal}
         onClose={() => setShowRoomModal(false)}
         rooms={rooms}
-        onConfirm={handleRoomConfirm}
+        onConfirm={handleRoomSelect}
       />
     </Row>
   );

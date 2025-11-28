@@ -10,14 +10,14 @@ export let users = [
 ];
 
 export let active_users = [
-  { room_id: 1, user_id: 1 },
-  { room_id: 1, user_id: 2 },
-  { room_id: 1, user_id: 3 },
-  { room_id: 2, user_id: 4 },
-  { room_id: 2, user_id: 5 },
-  { room_id: 2, user_id: 6 },
-  { room_id: 3, user_id: 7 },
-  { room_id: 3, user_id: 8 },
+  { room_id: 1, user_id: 1, size: 0 },
+  { room_id: 1, user_id: 2, size: 0 },
+  { room_id: 1, user_id: 3, size: 0 },
+  { room_id: 2, user_id: 4, size: 0 },
+  { room_id: 2, user_id: 5, size: 0 },
+  { room_id: 2, user_id: 6, size: 0 },
+  { room_id: 3, user_id: 7, size: 0 },
+  { room_id: 3, user_id: 8, size: 0 },
 ];
 
 export let rooms = [

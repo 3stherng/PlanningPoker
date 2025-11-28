@@ -61,7 +61,7 @@ router.post(
         current_user.is_moderator = false;
       }
     }
-    res.status(200).send(user_found ? "Moderator updated" : "Invalid request");
+    res.status(200).json(user_found ? "Moderator updated" : "Invalid request");
   }
 );
 
@@ -93,6 +93,23 @@ router.post("/update", function (req: express.Request, res: express.Response) {
   res.status(200).send(user_found ? "Name updated" : "Invalid request");
 });
 
+router.post("/vote", function (req: express.Request, res: express.Response) {
+// it will update the active_users to store the vote size
+  let user_found = false;
+  for (let active_user of active_users) {
+    if (
+      active_user.room_id === parseInt(req.body.room_id) &&
+      active_user.user_id === parseInt(req.body.user_id)
+    ) {
+      active_user.size = parseInt(req.body.size);
+      user_found = true;
+      break;
+    }
+  }
+  res.status(200).json(user_found ? "Vote recorded" : "Invalid request");
+});
+
+
 router.post(
   "/active_users",
   function (req: express.Request, res: express.Response) {
@@ -108,6 +125,59 @@ router.post(
       }
     }
     res.status(200).json(result_users);
+  }
+);
+
+router.post(
+  "/add_active_user",
+  function (req: express.Request, res: express.Response) {
+    const room_id = parseInt(req.body.room_id);
+    const user_id = parseInt(req.body.user_id);
+    let already_active = false;
+    for (let active_user of active_users) {
+      if (active_user.room_id === room_id && active_user.user_id === user_id) {
+        already_active = true;
+        break;
+      }
+    }
+    if (!already_active) {
+      active_users.push({ room_id: room_id, user_id: user_id, size: 0 });
+    }
+    res.status(200).json(active_users);
+  }
+)
+
+router.post("/get_votes", function (req: express.Request, res: express.Response) {
+  const room_id = parseInt(req.body.room_id);
+  let result_votes = [];
+  for (let active_user of active_users) {
+    if (active_user.room_id === room_id) {
+      result_votes.push({
+        user_id: active_user.user_id,
+        size: active_user.size,
+      });
+    }
+  }
+  res.status(200).json(result_votes);
+});
+
+router.post(
+  "/get_average_vote",
+  function (req: express.Request, res: express.Response) {
+    const room_id = parseInt(req.body.room_id);
+    let total_size = 0;
+    let vote_count = 0;
+    for (let active_user of active_users) {
+      if (active_user.room_id === room_id && active_user.size !== null) {
+        total_size += active_user.size;
+        vote_count += 1;
+      }
+    }
+    if (vote_count === 0) {
+      return res.status(200).json(null);
+    }
+    const average_size = total_size / vote_count;
+    res.status(200).json(average_size);
   }
 );
 

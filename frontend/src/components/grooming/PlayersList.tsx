@@ -1,37 +1,101 @@
-import { ListGroup, Badge } from "react-bootstrap";
+import { ListGroup, Badge, Button } from "react-bootstrap";
+import { Player, Vote } from "../../types/grooming";
 
 interface PlayersListProps {
-  allVotes: any[];
-  allUsers: any[];
+  votes: Vote[];
+  players: Player[];
+  currentUserId: number | null;
+  moderatorId: number | null;
+  votesRevealed: boolean;
+  onReveal: () => void;
 }
 
-export function PlayersList({ allVotes, allUsers }: PlayersListProps) {
+export function PlayersList({
+  votes,
+  players,
+  currentUserId,
+  moderatorId,
+  votesRevealed,
+  onReveal,
+}: PlayersListProps) {
+  // Debug: Log the votes and users data
+  console.log("PlayersList DEBUG:", {
+    votes,
+    players,
+    votesRevealed,
+    moderatorId,
+    currentUserId,
+  });
+
   const getVoteForUser = (userId: number) => {
-    return allVotes.find((v) => v.user_id === userId);
+    const vote = votes.find((v) => v.userId === userId);
+    console.log(`Looking for vote for user ${userId}:`, vote);
+    return vote;
   };
 
   return (
     <>
-      <h5 className="fw-semibold mb-3">Players</h5>
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <h5 className="fw-semibold mb-0">Players</h5>
+        {moderatorId === currentUserId && (
+          <Button
+            size="sm"
+            variant={votesRevealed ? "secondary" : "primary"}
+            onClick={() => onReveal()}
+            disabled={votesRevealed}
+          >
+            {votesRevealed ? "Votes revealed" : "Reveal votes"}
+          </Button>
+        )}
+      </div>
+
       <ListGroup>
-        {allUsers.map((user) => {
+        {players.map((user) => {
           const vote = getVoteForUser(user.id);
+
+          // determine badge content based on reveal state and whether this is the current user
+          let badgeText: React.ReactNode = "?";
+          if (votesRevealed) {
+            badgeText = vote?.size ?? 0;
+          } else if (vote && user.id === currentUserId) {
+            // always show own vote
+            badgeText = vote.size ?? 0;
+          } else if (vote) {
+            badgeText = "✓";
+          } else {
+            badgeText = "?";
+          }
+
+          console.log(`User ${user.name} (${user.id}):`, {
+            hasVote: !!vote,
+            voteObject: vote,
+            badgeText,
+            votesRevealed,
+          });
+
           return (
             <ListGroup.Item
               key={user.id}
               className="d-flex justify-content-between align-items-center"
             >
-              <span className="fw-bold">{user.name}</span>
-              <Badge bg={vote ? "primary" : "secondary"} pill>
-                {vote?.size ?? "?"}
+              <div>
+                <span className="fw-bold me-2">
+                  {user.name}
+                  {user.id === currentUserId && <small className="text-muted ms-1">(me)</small>}
+                </span>
+              </div>
+              <Badge
+                bg={votesRevealed || user.id === currentUserId ? "primary" : vote ? "success" : "secondary"}
+                pill
+              >
+                {badgeText}
               </Badge>
             </ListGroup.Item>
           );
         })}
-        {allUsers.length === 0 && (
-          <ListGroup.Item className="text-muted">
-            No active players yet.
-          </ListGroup.Item>
+
+        {players.length === 0 && (
+          <ListGroup.Item className="text-muted">No active players yet.</ListGroup.Item>
         )}
       </ListGroup>
     </>

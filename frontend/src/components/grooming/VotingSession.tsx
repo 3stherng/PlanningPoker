@@ -3,16 +3,20 @@ import { VotingGrid } from "./VotingGrid";
 import { PlayersList } from "./PlayersList";
 import { ActionButtons } from "./ActionButtons";
 import { GroomingHeader } from "./GroomingHeader";
+import { Player, Story, Vote, Feedback } from "../../types/grooming";
 
 interface VotingSessionProps {
   storyName: string;
   selectedStoryId: number | null;
-  allStories: any[];
+  stories: Story[];
   votingOptions: (number | string)[];
   currentUserId: number | null;
-  allUsers: any[];
-  allVotes: any[];
-  feedback: { type: "success" | "error"; message: string } | null;
+  players: Player[];
+  votes: Vote[];
+  moderatorId: number | null;
+  votesRevealed: boolean;
+  onRevealVotes: () => void;
+  feedback: Feedback | null;
   onStorySelect: (storyId: number, roomId: number | undefined) => void;
   onVote: (storyId: number | null, userId: number | null, size: number | null) => void;
   onSubmit: (storyId: number | null) => void;
@@ -23,17 +27,20 @@ interface VotingSessionProps {
 export function VotingSession({
   storyName,
   selectedStoryId,
-  allStories,
+  stories,
   votingOptions,
   currentUserId,
-  allUsers,
-  allVotes,
+  players,
+  votes,
   feedback,
   onStorySelect,
   onVote,
   onSubmit,
   onRevote,
   roomId,
+  moderatorId,
+  votesRevealed,
+  onRevealVotes,
 }: VotingSessionProps) {
   return (
     <Row className="justify-content-center my-5">
@@ -42,7 +49,7 @@ export function VotingSession({
           <GroomingHeader
             storyName={storyName}
             selectedStoryId={selectedStoryId}
-            allStories={allStories}
+            stories={stories}
             feedback={feedback}
             onStorySelect={onStorySelect}
             roomId={roomId}
@@ -60,7 +67,14 @@ export function VotingSession({
               </Col>
 
               <Col md={4}>
-                <PlayersList allVotes={allVotes} allUsers={allUsers} />
+                <PlayersList
+                  votes={votes}
+                  players={players}
+                  currentUserId={currentUserId}
+                  moderatorId={moderatorId}
+                  votesRevealed={votesRevealed}
+                  onReveal={onRevealVotes}
+                />
               </Col>
             </Row>
 

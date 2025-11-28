@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Card, Button, Accordion, Alert } from "react-bootstrap";
 import { Post } from "../communication";
+import { Feedback } from "../types/grooming";
 
 export function Configuration({ room_id }: { room_id: any }) {
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [moderator, setModerator] = useState<number>(1);
-  const [feedback, setFeedback] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   const fetchAllUsers = async (room_id: any) => {
     const { status, result } = await Post("/user/active_users", {
@@ -20,7 +18,7 @@ export function Configuration({ room_id }: { room_id: any }) {
 
   useEffect(() => {
     fetchAllUsers(room_id);
-  }, []);
+  }, [room_id]);
 
   const requestUpdateModerator = async (id: number) => {
     const { status } = await Post("/user/moderator", {

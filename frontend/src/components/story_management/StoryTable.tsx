@@ -1,29 +1,27 @@
 import { Table, Button } from "react-bootstrap";
+import { Story, StoryId, StoryViewType } from "../../types/storyManagement";
 
-export function StoryTable({
-  stories,
-  type,
-  onDelete,
-  onSize,
-}: {
-  stories: any[];
-  type: "all" | "active" | "completed";
-  onDelete: (id: any) => void;
-  onSize: (id: any) => void;
-}) {
+interface StoryTableProps {
+  stories: Story[];
+  viewType: StoryViewType;
+  onDelete: (storyId: StoryId) => void;
+  onGroom: (storyId: StoryId) => void;
+}
+
+export function StoryTable({ stories, viewType, onDelete, onGroom }: StoryTableProps) {
   return (
     <Table striped hover responsive>
       <thead>
         <tr>
           <th>ID</th>
           <th>Story Title</th>
-          {type !== "active" && <th>Size</th>}
+          {viewType !== "active" && <th>Size</th>}
           {<th>Actions</th>}
         </tr>
       </thead>
       <tbody>
         {stories.map((story, idx) => {
-          if (type === "all") {
+          if (viewType === "all") {
             return (
               <tr key={idx}>
                 <td>{story.id}</td>
@@ -33,7 +31,7 @@ export function StoryTable({
                     <Button
                       variant="primary"
                       size="sm"
-                      onClick={() => onSize(story.id)}
+                      onClick={() => onGroom(story.id)}
                     >
                       Groom
                     </Button>
@@ -51,7 +49,7 @@ export function StoryTable({
               </tr>
             );
           }
-          if (type === "active" && story.size == null) {
+          if (viewType === "active" && story.size == null) {
             return (
               <tr key={idx}>
                 <td>{story.id}</td>
@@ -60,7 +58,7 @@ export function StoryTable({
                   <Button
                     variant="primary"
                     size="sm"
-                    onClick={() => onSize(story.id)}
+                    onClick={() => onGroom(story.id)}
                   >
                     Groom
                   </Button>{" "}
@@ -75,7 +73,7 @@ export function StoryTable({
               </tr>
             );
           }
-          if (type === "completed" && story.size != null) {
+          if (viewType === "completed" && story.size != null) {
             return (
               <tr key={idx}>
                 <td>{story.id}</td>

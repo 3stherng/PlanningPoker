@@ -24,14 +24,15 @@ export function VotingGrid({
                 variant="outline-primary"
                 className="w-100 rounded-pill"
                 size="lg"
-                onClick={() =>
+                onClick={() => {
+                  console.log("Vote click", { selectedStoryId, currentUserId, size });
                   onVote(
                     selectedStoryId,
                     currentUserId,
                     size === "?" ? null : (size as number)
-                  )
-                }
-                disabled={!selectedStoryId || !currentUserId}
+                  );
+                }}
+                disabled={selectedStoryId == null || currentUserId == null}
               >
                 {size}
               </Button>
