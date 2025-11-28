@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Tab, Tabs, Button } from "react-bootstrap";
 import { StoryContext } from "../contexts/storyContext";
 import { Get, Post } from "../communication";
@@ -7,13 +7,11 @@ import { StoryTable } from "../components/view_story/StoryTable";
 import { EditStoryModal } from "../components/view_story/EditStoryModal";
 import { AddStoryModal } from "../components/view_story/AddStoryModal";
 import { FeedbackAlert } from "../components/view_story/FeedbackAlert";
+import { SelectRoomModal } from "../components/view_story/SelectRoomModal";
 
 export function ViewStory() {
-  const { id } = useParams(); // room id from URL
-
   const [allStories, setAllStories] = useState<any[]>([]);
   const [title, setTitle] = useState("");
-  const [editedTitle, setEditedTitle] = useState("");
   const [feedback, setFeedback] = useState<{
     type: "success" | "error";
     message: string;
@@ -21,18 +19,26 @@ export function ViewStory() {
 
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [editId, setEditId] = useState<any>(null);
+  const [showRoomModal, setShowRoomModal] = useState(false);
+
+  const [rooms, setRooms] = useState<any[]>([]);
 
   const { updateGroomingStoryID } = useContext(StoryContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchStories();
+    fetchRooms();
   }, []);
 
   const fetchStories = async () => {
     const { status, result } = await Get("/story/list");
     if (status) setAllStories(result);
+  };
+
+  const fetchRooms = async () => {
+    const { status, result } = await Get("/room/list");
+    if (status) setRooms(result);
   };
 
   const requestAddStory = async (title: string) => {
@@ -41,22 +47,6 @@ export function ViewStory() {
       setFeedback({ type: "success", message: "✅ Story added successfully!" });
       setAllStories(result);
     } else setFeedback({ type: "error", message: "⚠️ Failed to add story." });
-  };
-
-  const requestUpdateTitle = async (story_id: any, edited_title: string) => {
-    const { status, result } = await Post("/story/update", {
-      id: story_id,
-      title: edited_title,
-    });
-    if (status) {
-      setFeedback({
-        type: "success",
-        message: "✏️ Title updated successfully!",
-      });
-      setEditedTitle(result);
-      fetchStories();
-    } else
-      setFeedback({ type: "error", message: "⚠️ Failed to update title." });
   };
 
   const requestDeleteStory = async (story_id: any) => {
@@ -76,13 +66,16 @@ export function ViewStory() {
   };
 
   const submitEditedTitle = () => {
-    requestUpdateTitle(editId, editedTitle);
     setShowEdit(false);
   };
 
   const handleClick = (story_id: any) => {
-    navigate("/grooming");
     updateGroomingStoryID(story_id);
+    setShowRoomModal(true);
+  };
+
+  const handleRoomConfirm = (roomId: number) => {
+    navigate(`/grooming/${roomId}`);
   };
 
   return (
@@ -103,10 +96,6 @@ export function ViewStory() {
               <StoryTable
                 stories={allStories}
                 type="all"
-                onEdit={(id) => {
-                  setEditId(id);
-                  setShowEdit(true);
-                }}
                 onDelete={requestDeleteStory}
                 onSize={handleClick}
               />
@@ -115,7 +104,6 @@ export function ViewStory() {
               <StoryTable
                 stories={allStories}
                 type="active"
-                onEdit={() => {}}
                 onDelete={requestDeleteStory}
                 onSize={handleClick}
               />
@@ -124,7 +112,6 @@ export function ViewStory() {
               <StoryTable
                 stories={allStories}
                 type="completed"
-                onEdit={() => {}}
                 onDelete={() => {}}
                 onSize={() => {}}
               />
@@ -155,7 +142,13 @@ export function ViewStory() {
         show={showEdit}
         onClose={() => setShowEdit(false)}
         onConfirm={submitEditedTitle}
-        setEditedTitle={setEditedTitle}
+        setEditedTitle={() => {}}
+      />
+      <SelectRoomModal
+        show={showRoomModal}
+        onClose={() => setShowRoomModal(false)}
+        rooms={rooms}
+        onConfirm={handleRoomConfirm}
       />
     </Row>
   );

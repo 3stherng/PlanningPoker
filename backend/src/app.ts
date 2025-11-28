@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 
-import { UserRouter } from "./user/user.router";
-import { StoryRouter } from "./story/story.router";
-import { SizeRouter } from "./size/size.router";
-import { roomRouter } from "./room/room.router";
+import { UserRouter } from "./routers/user.router";
+import { StoryRouter } from "./routers/story.router";
+import { SizeRouter } from "./routers/size.router";
+import { roomRouter } from "./routers/room.router";
 
 const app = express();
 require("dotenv").config();

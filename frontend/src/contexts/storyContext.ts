@@ -4,6 +4,7 @@ export interface StoryContextType {
   allStories: any[];
   groomingStoryID: any;
   updateGroomingStoryID: (story: any) => void;
+  setGroomingStoryID: (story: any) => void;
   addStory: (story: any) => void;
   deleteStory: () => void;
   setUpdateStoryCallback: (callback: any) => void;
@@ -13,6 +14,7 @@ export const StoryContext = React.createContext<StoryContextType>({
   allStories: [],
   groomingStoryID: "",
   updateGroomingStoryID: () => {},
+  setGroomingStoryID: () => {},
   addStory: () => {},
   deleteStory: () => {},
   setUpdateStoryCallback: () => {},
@@ -23,6 +25,10 @@ export const StoryProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [grooming_story, setGroomingStory] = useState("");
 
   const updateGroomingStoryID = (story: any) => {
+    setGroomingStory(story);
+  };
+
+  const setGroomingStoryID = (story: any) => {
     setGroomingStory(story);
   };
 
@@ -42,6 +48,7 @@ export const StoryProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     allStories: stories,
     groomingStoryID: grooming_story,
     updateGroomingStoryID,
+    setGroomingStoryID,
     addStory,
     deleteStory,
     setUpdateStoryCallback,

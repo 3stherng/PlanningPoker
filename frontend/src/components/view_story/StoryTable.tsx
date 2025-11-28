@@ -3,13 +3,11 @@ import { Table, Button } from "react-bootstrap";
 export function StoryTable({
   stories,
   type,
-  onEdit,
   onDelete,
   onSize,
 }: {
   stories: any[];
   type: "all" | "active" | "completed";
-  onEdit: (id: any) => void;
   onDelete: (id: any) => void;
   onSize: (id: any) => void;
 }) {
@@ -20,7 +18,7 @@ export function StoryTable({
           <th>ID</th>
           <th>Story Title</th>
           {type !== "active" && <th>Size</th>}
-          {type !== "completed" && <th>Actions</th>}
+          {<th>Actions</th>}
         </tr>
       </thead>
       <tbody>
@@ -30,14 +28,24 @@ export function StoryTable({
               <tr key={idx}>
                 <td>{story.id}</td>
                 <td>{story.title}</td>
-                <td>{story.size ?? "Active"}</td>
+                <td>
+                  {story.size ?? (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => onSize(story.id)}
+                    >
+                      Groom
+                    </Button>
+                  )}
+                </td>
                 <td>
                   <Button
-                    variant="info"
+                    variant="danger"
                     size="sm"
-                    onClick={() => onEdit(story.id)}
+                    onClick={() => onDelete(story.id)}
                   >
-                    Edit
+                    Delete
                   </Button>
                 </td>
               </tr>
@@ -54,7 +62,7 @@ export function StoryTable({
                     size="sm"
                     onClick={() => onSize(story.id)}
                   >
-                    Let’s Size
+                    Groom
                   </Button>{" "}
                   <Button
                     variant="danger"
@@ -73,6 +81,15 @@ export function StoryTable({
                 <td>{story.id}</td>
                 <td>{story.title}</td>
                 <td>{story.size}</td>
+                <td>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => onDelete(story.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
               </tr>
             );
           }

@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-import { users } from "../data";
+import { users, active_users } from "../data";
 
 router.get("/list", function (req: express.Request, res: express.Response) {
   res.status(200).json(users);
@@ -31,7 +31,13 @@ router.post(
       res.status(400).send("name required");
       return;
     }
-    for (let user of users) if (max_id < user.id) max_id = user.id;
+    for (let user of users) {
+      if (req.body.name === user.name) {
+        res.status(200).send("skipped registration");
+        return;
+      }
+      if (max_id < user.id) max_id = user.id;
+    }
     const user = {
       id: max_id + 1,
       name: req.body.name,
@@ -86,5 +92,23 @@ router.post("/update", function (req: express.Request, res: express.Response) {
   }
   res.status(200).send(user_found ? "Name updated" : "Invalid request");
 });
+
+router.post(
+  "/active_users",
+  function (req: express.Request, res: express.Response) {
+    const room_id = parseInt(req.body.room_id);
+    let result_users = [];
+    for (let active_user of active_users) {
+      if (active_user.room_id === room_id) {
+        for (let user of users) {
+          if (user.id === active_user.user_id) {
+            result_users.push(user);
+          }
+        }
+      }
+    }
+    res.status(200).json(result_users);
+  }
+);
 
 export const UserRouter = router;

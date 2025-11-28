@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Card, Button, Accordion, Alert } from "react-bootstrap";
-import { Get, Post } from "../communication";
+import { Post } from "../communication";
 
-export function Configuration() {
+export function Configuration({ room_id }: { room_id: any }) {
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [moderator, setModerator] = useState<number>(1);
   const [feedback, setFeedback] = useState<{
@@ -10,14 +10,17 @@ export function Configuration() {
     message: string;
   } | null>(null);
 
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
-
-  const fetchAllUsers = async () => {
-    const { status, result } = await Get("/user/list");
+  const fetchAllUsers = async (room_id: any) => {
+    const { status, result } = await Post("/user/active_users", {
+      room_id,
+    });
     if (status) setAllUsers(result);
+    else setFeedback({ type: "error", message: "⚠️ Failed to fetch users." });
   };
+
+  useEffect(() => {
+    fetchAllUsers(room_id);
+  }, []);
 
   const requestUpdateModerator = async (id: number) => {
     const { status } = await Post("/user/moderator", {

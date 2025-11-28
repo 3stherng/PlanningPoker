@@ -14,7 +14,8 @@ router.post("/create", function (req: express.Request, res: express.Response) {
   for (let room of rooms) if (max_id < room.id) max_id = room.id;
   const room = {
     id: max_id + 1,
-    name: req.body.name
+    name: req.body.name,
+    story_id: null,
   };
   rooms.push(room);
   res.status(200).json(rooms);
@@ -37,6 +38,24 @@ router.post("/delete", function (req: express.Request, res: express.Response) {
   rooms.splice(idx_to_delete, 1);
   console.log(rooms);
   return res.status(200).send("room deleted");
+});
+
+router.post("/set_story", (req, res) => {
+  const { room_id, story_id } = req.body;
+  const room = rooms.find(r => r.id === room_id);
+  if (!room) return res.status(404).send("Room not found");
+
+  room.story_id = story_id;
+  res.status(200).send({ story_id: story_id });
+});
+
+// GET: fetch active story for a room
+router.get("/:room_id/active_story", (req, res) => {
+  const room_id = parseInt(req.params.room_id);
+  const room = rooms.find(r => r.id === room_id);
+  if (!room) return res.status(404).send("Room not found");
+
+  res.status(200).send({ story_id: room.story_id });
 });
 
 export const roomRouter = router;

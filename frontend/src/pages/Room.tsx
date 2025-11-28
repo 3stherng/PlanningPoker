@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -49,14 +49,8 @@ export function Room() {
   };
 
   const requestJoinRoom = async () => {
-    const { status } = await Post("/room/join", { id: joinRoomId });
-    if (status) {
-      setToast({ type: "success", message: "🚪 Joined room successfully!" });
-      setShowJoinModal(false);
-      navigate(`/room/${joinRoomId}`);
-    } else {
-      setToast({ type: "error", message: "⚠️ Failed to join room." });
-    }
+      console.log("Joining room with ID:", joinRoomId);
+      navigate(`/grooming/${joinRoomId}`);
   };
 
   return (
@@ -85,12 +79,6 @@ export function Room() {
                       onClick={() => navigate(`/grooming/${room.id}`)}
                     >
                       🚪 Enter Room
-                    </Button>
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => navigate(`/story/${room.id}`)}
-                    >
-                      📖 View Stories
                     </Button>
                   </div>
                 </Card.Body>

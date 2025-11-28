@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
-
+import { useContext, useState, useEffect } from "react";
 import { Form, Button, Row, Col, Card, Alert } from "react-bootstrap";
-
+import { useNavigate } from "react-router-dom";   // ✅ import navigate
 import { UserContext } from "../contexts/userContext";
 import { Post } from "../communication";
 
@@ -11,18 +10,37 @@ export function Homepage() {
     type: "success" | "error";
     message: string;
   } | null>(null);
+
   const { updateCurrUserName } = useContext(UserContext);
+  const navigate = useNavigate();   // ✅ hook
+
+  // ✅ Load cached user on first render
+  useEffect(() => {
+    const cachedUser = localStorage.getItem("currUser");
+    if (cachedUser) {
+      setCurrUser(cachedUser);
+      updateCurrUserName(cachedUser);
+      navigate("/story");   // ✅ redirect to your desired page
+    }
+  }, [updateCurrUserName, navigate]);
 
   const registerUser = async (name: string) => {
-    const { status } = await Post("/user/register", {
-      name,
-    });
+    const res = await Post("/user/register", { name });
+    const status = res.status;
+
     if (status) {
       setFeedback({
         type: "success",
         message: "🎉 Successfully registered! Welcome aboard.",
       });
       updateCurrUserName(name);
+      localStorage.setItem("currUser", name);
+      navigate("/stories");   // ✅ redirect after successful registration
+    } else if (res.result.error === "Conflict") {
+      setFeedback({
+        type: "error",
+        message: "⚠️ Username already taken. Please choose another.",
+      });
     } else {
       setFeedback({
         type: "error",
