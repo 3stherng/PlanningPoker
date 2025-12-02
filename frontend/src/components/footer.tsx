@@ -1,22 +1,12 @@
-export const Footer = () => {
+export const Footer = (): JSX.Element => {
   return (
-    <footer
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        width: "100%",
-        backgroundColor: "transparent",
-        color: "#000000",
-        textAlign: "right",
-        padding: "1rem 2rem",
-      }}
-    >
-      <small>
-        © {new Date().getFullYear()}{" "}
-        <span style={{ fontWeight: "bold" }}>Planning Poker</span> · All rights
-        reserved
-      </small>
+    <footer className="bg-transparent fixed-bottom">
+      <div className="container text-end py-3">
+        <small className="text-muted">
+          © {new Date().getFullYear()}{" "}
+          <span className="fw-bold">Planning Poker</span> · All rights reserved
+        </small>
+      </div>
     </footer>
   );
 };

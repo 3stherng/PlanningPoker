@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Card, Button, Accordion, Alert } from "react-bootstrap";
-import { Get, Post } from "../communication";
+import { Post } from "../communication";
+import { Feedback } from "../types/grooming";
 
-export function Configuration() {
+export function Configuration({ room_id }: { room_id: any }) {
   const [allUsers, setAllUsers] = useState<any[]>([]);
-  const [moderator, setModerator] = useState<number>(1);
-  const [feedback, setFeedback] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
+  const [moderator, setModerator] = useState<string>("");
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
-
-  const fetchAllUsers = async () => {
-    const { status, result } = await Get("/user/list");
+  const fetchAllUsers = async (room_id: any) => {
+    const { status, result } = await Post("/user/active_users", {
+      room_id,
+    });
     if (status) setAllUsers(result);
+    else setFeedback({ type: "error", message: "⚠️ Failed to fetch users." });
   };
 
-  const requestUpdateModerator = async (id: number) => {
+  useEffect(() => {
+    fetchAllUsers(room_id);
+  }, [room_id]);
+
+  const requestUpdateModerator = async (id: string) => {
     const { status } = await Post("/user/moderator", {
       id,
     });
@@ -32,7 +33,7 @@ export function Configuration() {
       setFeedback({ type: "error", message: "⚠️ Failed to update moderator." });
   };
 
-  const requestDeleteUser = async (id: number) => {
+  const requestDeleteUser = async (id: string) => {
     const { status } = await Post("/user/delete", { id });
     if (status) {
       setFeedback({ type: "success", message: "🗑️ User deleted." });
@@ -40,12 +41,12 @@ export function Configuration() {
     } else setFeedback({ type: "error", message: "⚠️ Failed to delete user." });
   };
 
-  function updateModerator(user_id: number) {
+  function updateModerator(user_id: string) {
     setModerator(user_id);
     requestUpdateModerator(user_id);
   }
 
-  function deleteUser(user_id: number) {
+  function deleteUser(user_id: string) {
     requestDeleteUser(user_id);
   }
 

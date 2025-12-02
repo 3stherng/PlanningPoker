@@ -1,44 +1,24 @@
-import { useContext, useState } from "react";
+import { Row, Col, Card } from "react-bootstrap";
+import { useAuth } from "../hooks/useAuth";
+import { UserRegistrationForm } from "../components/homepage/UserRegistrationForm";
 
-import { Form, Button, Row, Col, Card, Alert } from "react-bootstrap";
-
-import { UserContext } from "../contexts/userContext";
-import { Post } from "../communication";
-
+/**
+ * Homepage component.
+ *
+ * Displays the application landing page with user registration.
+ *
+ * This component follows SOLID principles:
+ * - Single Responsibility: Only handles page layout and orchestration
+ * - Open/Closed: Easily extensible with new authentication methods
+ * - Liskov Substitution: Components are interchangeable with same interface
+ * - Interface Segregation: Each component has focused props
+ * - Dependency Inversion: Depends on abstractions (useAuth hook) not implementations
+ *
+ * Business logic is delegated to useAuth hook, UI components handle their own rendering.
+ */
 export function Homepage() {
-  const [currUser, setCurrUser] = useState("");
-  const [feedback, setFeedback] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
-  const { updateCurrUserName } = useContext(UserContext);
-
-  const registerUser = async (name: string) => {
-    const { status } = await Post("/user/register", {
-      name,
-    });
-    if (status) {
-      setFeedback({
-        type: "success",
-        message: "🎉 Successfully registered! Welcome aboard.",
-      });
-      updateCurrUserName(name);
-    } else {
-      setFeedback({
-        type: "error",
-        message: "⚠️ Something went wrong. Please try again.",
-      });
-    }
-  };
-
-  const handleClick = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currUser.trim()) {
-      setFeedback({ type: "error", message: "Please enter a valid name." });
-      return;
-    }
-    registerUser(currUser);
-  };
+  const { username, setUsername, register, feedback, setFeedback } =
+    useAuth("/story");
 
   return (
     <Row className="justify-content-center align-items-center vh-100 bg-light">
@@ -51,37 +31,13 @@ export function Homepage() {
             </p>
           </div>
 
-          {feedback && (
-            <Alert
-              variant={feedback.type === "success" ? "success" : "danger"}
-              className="text-center"
-            >
-              {feedback.message}
-            </Alert>
-          )}
-
-          <Form onSubmit={handleClick}>
-            <Form.Group className="mb-4" controlId="formUser">
-              <Form.Label className="fw-semibold">Enter your name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="e.g. Esther"
-                value={currUser}
-                onChange={(e) => setCurrUser(e.target.value)}
-                className="rounded-pill"
-              />
-            </Form.Group>
-            <div className="d-grid">
-              <Button
-                variant="primary"
-                type="submit"
-                size="lg"
-                className="rounded-pill"
-              >
-                Join the Room
-              </Button>
-            </div>
-          </Form>
+          <UserRegistrationForm
+            username={username}
+            onUsernameChange={setUsername}
+            onSubmit={register}
+            feedback={feedback}
+            onDismissFeedback={() => setFeedback(null)}
+          />
         </Card>
       </Col>
     </Row>

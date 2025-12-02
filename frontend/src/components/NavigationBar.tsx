@@ -1,10 +1,20 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Link } from "react-router-dom";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../contexts/userContext";
 
 export function NavigationBar(props: any) {
   let user_name: string = !props.user ? "" : props.user;
+  const { logout } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <>
@@ -28,20 +38,21 @@ export function NavigationBar(props: any) {
           >
             Planning Poker
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/story">
-                Story Management
-              </Nav.Link>
-              <Nav.Link as={Link} to="/grooming">
-                Grooming
-              </Nav.Link>
-              <Nav.Link as={Link} to="/configuration">
-                Configuration
-              </Nav.Link>
+              {/* if not login, show warning to login and not link */}
+              {user_name === "" ? (
+                <Nav.Link disabled style={{ color: "#6c757d" }}>
+                  Stories
+                </Nav.Link>
+              ) : (
+                <Nav.Link as={Link} to="/story" style={{ color: "#0d6efd" }}>
+                  Stories
+                </Nav.Link>
+              )}
             </Nav>
           </Navbar.Collapse>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
               {/* if user_name is empty then show login button */}
@@ -57,16 +68,22 @@ export function NavigationBar(props: any) {
                   Login
                 </Link>
               ) : (
-                <Link
-                  to="/profile"
+                <NavDropdown
+                  title={user_name}
+                  id="basic-nav-dropdown"
+                  align="end"
                   style={{
                     color: "#0d6efd",
                     fontWeight: "500",
-                    textDecoration: "none",
                   }}
                 >
-                  {user_name}
-                </Link>
+                  <NavDropdown.Item
+                    onClick={handleLogout}
+                    style={{ color: "#000000" }}
+                  >
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
               )}
             </Navbar.Text>
           </Navbar.Collapse>

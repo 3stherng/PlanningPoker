@@ -44,3 +44,12 @@ export const Post = async (path: string, payload: any = null) => {
     return { status: false, result: { error: err.message } };
   }
 };
+
+export const Delete = async (path: string, payload: any = null) => {
+  try {
+    return await MakeRequest(path, "DELETE", payload);
+  } catch (err: any) {
+    console.error(err.message);
+    return { status: false, result: { error: err.message } };
+  }
+};

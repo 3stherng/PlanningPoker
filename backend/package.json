@@ -11,7 +11,7 @@
     "prebuild": "echo Building TypeScript...",
     "start": "node dist/app.js",
     "prestart": "npm run build",
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon --exec \"ts-node\" src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Esther",
@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "dotenv": "^17.2.3",
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "prettier": "^3.7.3",
+    "ts-node": "^10.9.2"
   }
 }

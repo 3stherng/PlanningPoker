@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { StoryContext } from "./contexts/storyContext";
 import { UserContext } from "./contexts/userContext";
 
 import { NavigationBar } from "./components/NavigationBar";
@@ -13,7 +12,6 @@ import { Homepage } from "./pages/Homepage";
 import { ViewStory } from "./pages/StoryManagement";
 import { Grooming } from "./pages/Grooming";
 import { Room } from "./pages/Room";
-import { Configuration } from "./pages/Configuration";
 
 function App() {
   const { currUserName } = useContext(UserContext);
@@ -28,8 +26,7 @@ function App() {
           <Route path="/" element={<Room />}></Route>
         )}
         <Route path="/story" element={<ViewStory />}></Route>
-        <Route path="/grooming" element={<Grooming />}></Route>
-        <Route path="/configuration" element={<Configuration />}></Route>
+        <Route path="/grooming/:room_id" element={<Grooming />}></Route>
         <Route path="/room" element={<Room />}></Route>
       </Routes>
       <Footer></Footer>
